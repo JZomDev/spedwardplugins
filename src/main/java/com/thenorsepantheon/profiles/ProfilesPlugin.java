@@ -24,6 +24,7 @@
  */
 package com.thenorsepantheon.profiles;
 
+import com.google.gson.Gson;
 import com.google.inject.Provides;
 import java.util.concurrent.ScheduledExecutorService;
 import javax.inject.Inject;
@@ -66,6 +67,9 @@ public class ProfilesPlugin extends Plugin
 	@Inject
 	private ScheduledExecutorService executorService;
 
+	@Inject
+	private Gson gson;
+
 	private ProfilesPanel panel;
 	private NavigationButton navButton;
 
@@ -78,9 +82,9 @@ public class ProfilesPlugin extends Plugin
 	@Override
 	protected void startUp() throws Exception
 	{
-		ProfilesStorage.loadProfiles();
+		ProfilesStorage.loadProfiles(gson);
 
-		panel = new ProfilesPanel(client, config, configManager, profileManager, executorService);
+		panel = new ProfilesPanel(client, config, configManager, profileManager, executorService, gson);
 
 		final BufferedImage icon = ImageUtil.getResourceStreamFromClass(getClass(), "profiles_icon.png");
 
@@ -108,5 +112,4 @@ public class ProfilesPlugin extends Plugin
 			panel.redrawProfiles();
 		}
 	}
-
 }

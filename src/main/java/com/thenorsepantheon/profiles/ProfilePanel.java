@@ -24,6 +24,7 @@
  */
 package com.thenorsepantheon.profiles;
 
+import com.google.gson.Gson;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -42,7 +43,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
-import net.runelite.client.account.SessionManager;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.config.ConfigProfile;
 import net.runelite.client.config.ProfileManager;
@@ -69,7 +69,7 @@ class ProfilePanel extends JPanel
 	private final ScheduledExecutorService executor;
 
 
-	ProfilePanel(Client client, Profile profile, ProfilesConfig config, ProfilesPanel parent, ConfigManager configManager, ProfileManager profileManager, ScheduledExecutorService executor)
+	ProfilePanel(Client client, Profile profile, ProfilesConfig config, ProfilesPanel parent, ConfigManager configManager, ProfileManager profileManager, ScheduledExecutorService executor, Gson gson)
 	{
 		this.client = client;
 		this.config = config;
@@ -108,7 +108,7 @@ class ProfilePanel extends JPanel
 				panel.getParent().remove(panel);
 				Profile.getProfiles().removeIf(p -> p.getLabel().equals(profile.getLabel())
 					&& p.getLogin().equals(profile.getLogin()));
-				ProfilesStorage.saveProfiles();
+				ProfilesStorage.saveProfiles(gson);
 				parent.repaint();
 			}
 

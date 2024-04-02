@@ -24,6 +24,7 @@
  */
 package com.thenorsepantheon.profiles;
 
+import com.google.gson.Gson;
 import com.thenorsepantheon.profiles.ui.Button;
 import com.thenorsepantheon.profiles.ui.PasswordField;
 import com.thenorsepantheon.profiles.ui.TextField;
@@ -56,6 +57,7 @@ class ProfilesPanel extends PluginPanel
 	private ConfigManager configManager;
 	private ProfileManager profileManager;
 	private ScheduledExecutorService executor;
+	private Gson gson;
 
 	private final TextField txtAccountLabel = new TextField(ACCOUNT_LABEL);
 	private final PasswordField txtAccountLogin;
@@ -63,7 +65,7 @@ class ProfilesPanel extends PluginPanel
 	private final GridBagConstraints c;
 
 	@Inject
-	public ProfilesPanel(Client client, ProfilesConfig config, ConfigManager configManager, ProfileManager profileManager, ScheduledExecutorService	executor)
+	public ProfilesPanel(Client client, ProfilesConfig config, ConfigManager configManager, ProfileManager profileManager, ScheduledExecutorService	executor, Gson gson)
 	{
 		super();
 		this.client = client;
@@ -71,6 +73,7 @@ class ProfilesPanel extends PluginPanel
 		this.configManager = configManager;
 		this.profileManager = profileManager;
 		this.executor = executor;
+		this.gson = gson;
 
 		setBorder(new EmptyBorder(18, 10, 0, 10));
 		setBackground(ColorScheme.DARK_GRAY_COLOR);
@@ -106,7 +109,7 @@ class ProfilesPanel extends PluginPanel
 			this.addProfile(profile);
 			try
 			{
-				ProfilesStorage.saveProfiles();
+				ProfilesStorage.saveProfiles(gson);
 			}
 			catch (IOException ex)
 			{
@@ -151,7 +154,7 @@ class ProfilesPanel extends PluginPanel
 
 	private void addProfile(Profile profile)
 	{
-		ProfilePanel profilePanel = new ProfilePanel(client, profile, profilesConfig, this, configManager, profileManager, executor);
+		ProfilePanel profilePanel = new ProfilePanel(client, profile, profilesConfig, this, configManager, profileManager, executor, gson);
 		c.gridy++;
 		profilesPanel.add(profilePanel, c);
 
